@@ -5,58 +5,60 @@ import com.example.account.dto.converter.CustomerDtoConverter;
 import com.example.account.exception.CustomerNotFoundException;
 import com.example.account.model.Customer;
 import com.example.account.repository.CustomerRepository;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-public class CustomerServiceTest{
+public class CustomerServiceTest {
 
-    private CustomerService customerService;
+    @Mock
     private CustomerRepository customerRepository;
+
+    @Mock
     private CustomerDtoConverter customerDtoConverter;
 
+    @InjectMocks
+    private CustomerService customerService;
+
     @BeforeEach
-    public void setUp(){
-        customerRepository = Mockito.mock(CustomerRepository.class);
-        customerDtoConverter = Mockito.mock(CustomerDtoConverter.class);
-        customerService = new CustomerService(customerRepository, customerDtoConverter);
+    public void init() {
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    public void testFindByCustomerId_whenCustomerIdExists_shouldReturnCustomer(){
-        Customer customer = new Customer("id", "name", "surname", Set.of());
+    public void givenValidCustomerId_whenGetCustomerById_thenReturnCustomerDto() {
+        // Given
+        Customer customer = new Customer("1", "name", "surname", Set.of());
 
-        Mockito.when(customerRepository.findById("id")).thenReturn(Optional.of(customer));
+        CustomerDto customerDto = new CustomerDto("1", "name", "surname", Set.of());
 
-        Customer result = customerService.findCustomerById("id");
+        when(customerRepository.findById("1")).thenReturn(Optional.of(customer));
+        when(customerDtoConverter.convertToCustomerDto(customer)).thenReturn(customerDto);
 
-        assertEquals(result, customer);
+        // When
+        CustomerDto result = customerService.getCustomerById("1");
+
+        // Then
+        Assertions.assertEquals(customerDto, result);
+        verify(customerRepository, times(1)).findById("1");
+        verify(customerDtoConverter, times(1)).convertToCustomerDto(customer);
     }
 
     @Test
-    public void testFindByCustomerId_whenCustomerIdDoesNotExists_shouldThrowCustomerNotFoundException(){
-        Mockito.when(customerRepository.findById("id")).thenReturn(Optional.empty());
+    public void givenInvalidCustomerId_whenGetCustomerById_thenThrowException() {
+        String customerId = "1";
+        when(customerRepository.findById(customerId)).thenReturn(Optional.empty());
 
-        assertThrows(CustomerNotFoundException.class, () -> customerService.findCustomerById("id"));
-    }
-
-    @Test
-    public void testGetCustomerById_whenCustomerIdExists_shouldReturnCustomer(){
-        Customer customer = new Customer("id", "name", "surname", Set.of());
-        CustomerDto customerDto = new CustomerDto("id", "name", "surname", Set.of());
-
-        Mockito.when(customerRepository.findById("id")).thenReturn(Optional.of(customer));
-        Mockito.when(customerDtoConverter.convertToCustomerDto(customer)).thenReturn(customerDto);
-
-        CustomerDto result = customerService.getCustomerById("id");
-
-        assertEquals(result, customerDto);
+        Assertions.assertThrows(CustomerNotFoundException.class, () -> customerService.getCustomerById(customerId));
+        verify(customerRepository, times(1)).findById(customerId);
     }
 
 }
