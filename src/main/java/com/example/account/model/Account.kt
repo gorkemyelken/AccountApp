@@ -20,7 +20,7 @@ data class Account(
     val customer: Customer?,
 
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
-    val transaction: Set<Transaction>?
+    val transactions: Set<Transaction>?
 
 ) {
     override fun equals(other: Any?): Boolean {
@@ -33,7 +33,7 @@ data class Account(
         if (balance != other.balance) return false
         if (creationDate != other.creationDate) return false
         if (customer != other.customer) return false
-        if (transaction != other.transaction) return false
+        if (transactions != other.transactions) return false
 
         return true
     }
