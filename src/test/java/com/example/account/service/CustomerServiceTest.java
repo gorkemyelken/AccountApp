@@ -35,7 +35,6 @@ public class CustomerServiceTest {
 
     @Test
     public void givenValidCustomerId_whenGetCustomerById_thenReturnCustomerDto() {
-        // Given
         Customer customer = new Customer("1", "name", "surname", Set.of());
 
         CustomerDto customerDto = new CustomerDto("1", "name", "surname", Set.of());
@@ -43,10 +42,8 @@ public class CustomerServiceTest {
         when(customerRepository.findById("1")).thenReturn(Optional.of(customer));
         when(customerDtoConverter.convertToCustomerDto(customer)).thenReturn(customerDto);
 
-        // When
         CustomerDto result = customerService.getCustomerById("1");
 
-        // Then
         Assertions.assertEquals(customerDto, result);
         verify(customerRepository, times(1)).findById("1");
         verify(customerDtoConverter, times(1)).convertToCustomerDto(customer);
