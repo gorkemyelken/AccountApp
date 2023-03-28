@@ -5,11 +5,11 @@ import com.example.account.dto.converter.CustomerDtoConverter;
 import com.example.account.exception.CustomerNotFoundException;
 import com.example.account.model.Customer;
 import com.example.account.repository.CustomerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CustomerService {
-
     private final CustomerRepository customerRepository;
     private final CustomerDtoConverter customerDtoConverter;
 
