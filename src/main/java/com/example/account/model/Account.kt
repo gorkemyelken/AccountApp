@@ -22,4 +22,6 @@ data class Account(
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
     val transaction: Set<Transaction>?
 
-)
+) {
+
+}
