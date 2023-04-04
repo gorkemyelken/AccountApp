@@ -27,6 +27,14 @@
 *   Postman
 *   Docker
 
+### 🚀 Run & Build
+---
+
+*   Docker
+    $ cd account
+    $ docker build -t account:1.0 .
+    $ docker run --name account -d -p $PORT:8080 account:1.0
+
 <h2>📧 Contact</h2>
 
 Görkem Yelken - [gorkemyelken@gmail.com](mailto:gorkemyelken@gmail.com)
