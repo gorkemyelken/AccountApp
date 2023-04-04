@@ -13,10 +13,8 @@
 
 ✅ Attention to CI/CD
 
-### 💻 Built with
+### 💻 Technologies used in the project
 ---
-
-Technologies used in the project:
 
 *   Java
 *   Spring Boot
